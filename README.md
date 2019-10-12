@@ -8,6 +8,16 @@
 
 [![asciicast](https://asciinema.org/a/273928.svg)](https://asciinema.org/a/273928)
 
+### Description
+A standalone script supporting both python2 & python3 to find out all SUID binaries in machines/CTFs and do the following
+- List all Default SUID Binaries (which ship with linux/aren't exploitable)
+- List all Custom Binaries (which don't ship with packages/vanilla installation)
+- List all custom binaries found in GTFO Bin's (This is where things get interesting)
+- Try and exploit found custom SUID binaries which won't impact machine's files
+
+Why This? 
+- Because LinEnum and other enumeration scripts only print SUID binaries & GTFO Binaries, they don't seperate default from custom, which leads to severe head banging in walls for 3-4 hours when you can't escalate privs :) 
+
 ### Output
 <a href="https://github.com/Anon-Exploiter/SUID3NUM/blob/master/output.m" target="_blank">SUID 3NUM's Sample Output</a>
 
