@@ -10,7 +10,7 @@ import os
 The following list contains all default SUID bins found within Unix
 """
 
-defSUIDBinaries = ['/bin/fusermount', '/bin/mount', '/bin/ping', '/bin/ping6', '/bin/su', '/bin/umount', '/opt/google/chrome/chrome-sandbox', '/sbin/mount.ecryptfs_private', '/sbin/mount.nfs', '/usr/bin/arping', '/usr/bin/at', '/usr/bin/bwrap', '/usr/bin/chfn', '/usr/bin/chsh', '/usr/bin/fusermount', '/usr/bin/gpasswd', '/usr/bin/kismet_capture', '/usr/bin/mount', '/usr/bin/newgidmap', '/usr/bin/newgrp', '/usr/bin/newuidmap', '/usr/bin/ntfs-3g', '/usr/bin/passwd', '/usr/bin/pkexec', '/usr/bin/su', '/usr/bin/sudo', '/usr/bin/traceroute6.iputils', '/usr/bin/ubuntu-core-launcher', '/usr/bin/umount', '/usr/bin/vmware-user-suid-wrapper', '/usr/lib/authbind/helper', '/usr/lib/chromium-browser/chrome-sandbox', '/usr/lib/dbus-1.0/dbus-daemon-launch-helper', '/usr/lib/eject/dmcrypt-get-device', '/usr/lib/openssh/ssh-keysign', '/usr/lib/policykit-1/polkit-agent-helper-1', '/usr/lib/virtualbox/VBoxHeadless', '/usr/lib/virtualbox/VBoxNetAdpCtl', '/usr/lib/virtualbox/VBoxNetDHCP', '/usr/lib/virtualbox/VBoxNetNAT', '/usr/lib/virtualbox/VBoxSDL', '/usr/lib/virtualbox/VBoxVolInfo', '/usr/lib/virtualbox/VirtualBoxVM', '/usr/lib/vmware/bin/vmware-vmx', '/usr/lib/vmware/bin/vmware-vmx-debug', '/usr/lib/vmware/bin/vmware-vmx-stats', '/usr/lib/x86_64-linux-gnu/lxc/lxc-user-nic', '/usr/lib/xorg/Xorg.wrap', '/usr/sbin/exim4', '/usr/sbin/mount.cifs', '/usr/sbin/mount.nfs', '/usr/sbin/pppd', '/usr/sbin/vmware-authd', '/usr/share/skypeforlinux/chrome-sandbox']
+defSUIDBinaries = ["arping", "at", "bwrap", "chfn", "chrome-sandbox", "chsh", "dbus-daemon-launch-helper", "dmcrypt-get-device", "exim4", "fusermount", "gpasswd", "helper", "kismet_capture", "lxc-user-nic", "mount", "mount.cifs", "mount.ecryptfs_private", "mount.nfs", "newgidmap", "newgrp", "newuidmap", "ntfs-3g", "passwd", "ping", "ping6", "pkexec", "polkit-agent-helper-1", "pppd", "ssh-keysign", "su", "sudo", "traceroute6.iputils", "ubuntu-core-launcher", "umount", "VBoxHeadless", "VBoxNetAdpCtl", "VBoxNetDHCP", "VBoxNetNAT", "VBoxSDL", "VBoxVolInfo", "VirtualBoxVM", "vmware-authd", "vmware-user-suid-wrapper", "vmware-vmx", "vmware-vmx-debug", "vmware-vmx-stats", "Xorg.wrap"]
 
 """
 The following list contains GTFO Bins binaries which are SUID exploitable
@@ -46,7 +46,7 @@ def listAllSUIDBinaries():
 	print(white + "[" + blue + "#" + white + "] " + yellow + "Finding/Listing all SUID Binaries ..")
 	print(white + barLine)
 	
-	command 	= "find / -perm /4000 2>/dev/null"
+	command 	= "find /usr/ -perm /4000 2>/dev/null"
 	result 		= os.popen(command).read().strip().split("\n")
 	
 	for bins in result:
@@ -68,24 +68,24 @@ def doSomethingPlis(listOfSuidBins):
 	customSuidBins 	= []
 	defaultSuidBins = []
 
-	for suidBin in listOfSuidBins:
-		_bin 	= suidBin[::-1].split("/")[0][::-1]
-		if _bin in gtfoBinsList:
-			binsInGTFO.append(suidBin)
+	for bins in listOfSuidBins:
+		_binName 	= bins.split("/")[::-1][0]
 
-	for suidBin in listOfSuidBins:
-		if not(suidBin in defSUIDBinaries):
-			customSuidBins.append(suidBin)
+		if _binName not in defSUIDBinaries:
+			customSuidBins.append(bins)
+
+			if _binName in gtfoBinsList:
+				binsInGTFO.append(bins)
 
 		else:
-			defaultSuidBins.append(suidBin)
+			defaultSuidBins.append(bins)
 
-	print("["+ red + "!" + white + "] Default Binaries (Don't bother)")
+	print(white + "["+ red + "!" + white + "] Default Binaries (Don't bother)")
 	print(barLine)
 	for bins in defaultSuidBins: print(blue + bins)
 	print(white + barLine + "\n\n")
 
-	print("[" + cyan + "~" + white + "] " + cyan + "Custom SUID Binaries (Interesting Stuff)")
+	print(white + "[" + cyan + "~" + white + "] " + cyan + "Custom SUID Binaries (Interesting Stuff)")
 	print(white + barLine)
 	for bins in customSuidBins: print(cyan + bins)
 	print(white + barLine + "\n\n")
