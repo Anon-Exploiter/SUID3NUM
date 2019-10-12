@@ -46,7 +46,7 @@ def listAllSUIDBinaries():
 	print(white + "[" + blue + "#" + white + "] " + yellow + "Finding/Listing all SUID Binaries ..")
 	print(white + barLine)
 	
-	command 	= "find /usr/ -perm /4000 2>/dev/null"
+	command 	= "find / -perm /4000 2>/dev/null"
 	result 		= os.popen(command).read().strip().split("\n")
 	
 	for bins in result:
