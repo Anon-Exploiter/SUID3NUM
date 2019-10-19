@@ -4,7 +4,7 @@
 [![python](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/)
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)](https://github.com/ellerbrock/open-source-badge/)
 
-**A standalone python script which utilizes python's built-in modules to find SUID bins, separate default bins, custom bins & show bins in GTFO Bin's repository with colors! ( ͡° ͜ʖ ͡°)**
+**A standalone python script which utilizes python's built-in modules to find SUID bins, separate default bins from custom bins, cross-match those with bins in GTFO Bin's repository & auto-exploit those, all with colors! ( ͡ʘ ͜ʖ ͡ʘ)**
 
 [![asciicast](https://asciinema.org/a/273928.svg)](https://asciinema.org/a/273928)
 
