@@ -165,7 +165,7 @@ def listAllSUIDBinaries():
 	print(white + "[" + blue + "#" + white + "] " + yellow + "Finding/Listing all SUID Binaries ..")
 	print(white + barLine)
 	
-	command 	= "find / -perm /4000 2>/dev/null"
+	command 	= "find / -perm -4000 2>/dev/null"
 	result 		= popen(command).read().strip().split("\n")
 	
 	for bins in result:
@@ -237,7 +237,7 @@ def doSomethingPlis(listOfSuidBins):
 		bName = binary[::-1].split("/")[0][::-1]
 		if(bName not in suidExploitation):
 			exploitation 	= myDict[bName]
-			print(exploitation.replace('./' + bName, binary))
+			print(white + "[" + cyan + "&" + white + "] " + magenta + bName.capitalize() + white + "\n```\n" + blue + exploitation.replace('./' + bName, binary) + white + "\n```\n")
 	
 	print(white + barLine+"\n\n")
 	return(binsInGTFO, defaultSuidBins, customSuidBins)
