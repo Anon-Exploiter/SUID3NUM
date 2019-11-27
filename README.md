@@ -18,6 +18,12 @@ A standalone script supporting both python2 & python3 to find out all SUID binar
 Why This? 
 - Because LinEnum and other enumeration scripts only print SUID binaries & GTFO Binaries, they don't seperate default from custom, which leads to severe head banging in walls for 3-4 hours when you can't escalate privs :) 
 
+
+### Changelog
+- Added new section of binaries which impact the system (Auto-Exploitation isn't supported for binaries which impact the system in any way i.e. creating new files, directories, modifying existing files etc.). The user has to manually execute those commands, and is supposed to understand those before running as well! (POC: 
+https://i.imgur.com/rSzA9wi.png)
+
+
 ### Output
 <a href="https://github.com/Anon-Exploiter/SUID3NUM/blob/master/output.m" target="_blank">SUID 3NUM's Sample Output</a>
 
@@ -51,6 +57,8 @@ Why This?
 ### Output
 
 <img src="https://i.imgur.com/FME2USf.gif" />
+https://i.imgur.com/FclFFwg.png
+
 
 ### Auto Exploitation of SUID Bins
 
