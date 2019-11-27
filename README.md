@@ -21,7 +21,7 @@ Why This?
 
 ### Changelog
 - Added new section of binaries which impact the system (Auto-Exploitation isn't supported for binaries which impact the system in any way i.e. creating new files, directories, modifying existing files etc.). The user has to manually execute those commands, and is supposed to understand those before running as well! (POC: 
-https://i.imgur.com/rSzA9wi.png)
+https://i.imgur.com/FclFFwg.png)
 
 
 ### Output
