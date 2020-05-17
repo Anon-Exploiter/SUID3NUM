@@ -69,6 +69,9 @@ https://i.imgur.com/FclFFwg.png
 P.S ~ Don't run with `-e` parameter, if you don't know what you're doing!
 </code></pre>
 
+### Stargazers Chart
+[![Stargazers over time](https://starchart.cc/Anon-Exploiter/SUID3NUM.svg)](https://starchart.cc/Anon-Exploiter/SUID3NUM)
+
 ### Thanks
 <code>
 Shoutout to Zeeshan Sahi & Bilal Rizwan for their ideas and contribution. 
