@@ -155,7 +155,7 @@ barLine = "------------------------------"
 banner 	= magenta + "  ___ _   _ _ ___    _____  _ _   _ __  __ \n"
 banner += yellow + " / __| | | / |   \\  |__ / \\| | | | |  \\/  |\n"
 banner += blue + " \\__ \\ |_| | | |) |  |_ \\ .` | |_| | |\\/| |\n"
-banner += red + " |___/\\___/|_|___/  |___/_|\\_|\\___/|_|  |_| " + cyan + " github@Anon-Exploiter\n"
+banner += red + " |___/\\___/|_|___/  |___/_|\\_|\\___/|_|  |_| " + cyan + " twitter@syed__umar\n"
 
 
 def listAllSUIDBinaries():
