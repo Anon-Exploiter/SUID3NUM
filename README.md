@@ -23,14 +23,6 @@ Why This?
 - Added new section of binaries which impact the system (Auto-Exploitation isn't supported for binaries which impact the system in any way i.e. creating new files, directories, modifying existing files etc.). The user has to manually execute those commands, and is supposed to understand those before running as well! (POC: 
 https://i.imgur.com/FclFFwg.png)
 
-### ToDos (if anyone wants to contribute)
-```bash
-['gtester', 'tac', 'netcat', 'script', 'hexdump', 'ksshell', 'irb', 'man', 'vi', 'sysctl', 'nohup', 'look', 'zsoelim', 'base32', 'rake', 'ruby', 'dialog', 'soelim', 'pry', 'strings', 'restic', 'hd', 'iconv', 'ftp', 'uuencode', 'lwp-download', 'highlight', 'xz', 'wish', 'sftp', 'sh', 'chroot', 'lwp-request', 'ssh', 'uudecode', 'byebug', 'eqn']
-```
-
-These binaries are currently missing from the script, need to work on getting these from [GTFObins](https://gtfobins.github.io/) and putting in here. 
-
-
 ### Output
 <a href="https://github.com/Anon-Exploiter/SUID3NUM/blob/master/output.m" target="_blank">SUID 3NUM's Sample Output</a>
 
