@@ -7,8 +7,6 @@ Works with both python2 & python3
 from sys import argv
 from os import system, popen
 from time import sleep
-import json
-
 
 """
 The following list contains exploits for all known SUID binaries
@@ -317,8 +315,6 @@ def exploitThisShit(bins):
 					sleep(0.5)
 					system(_commands)
 					sleep(0.5)
-
-				print(white + barLine + "\n\n")
 
 		else:
 			print(white + "[" + green + "$" + white + "] " + white + "Please try the command(s) below to exploit harmless SUID bin(s) found !!!")
