@@ -188,7 +188,7 @@ def listAllSUIDBinaries():
 	print(white + "[" + blue + "#" + white + "] " + yellow + "Finding/Listing all SUID Binaries ..")
 	print(white + barLine)
 	
-	command 	= "find / -perm -4000 2>/dev/null" # Since /4000 isn't backwards compatible with old versions of find ..  :)) 
+	command 	= "find / -perm -4000 -type f 2>/dev/null" # Since /4000 isn't backwards compatible with old versions of find ..  :)) 
 	result 		= popen(command).read().strip().split("\n")
 	
 	for bins in result:
