@@ -1,5 +1,4 @@
 # SUID3NUM
-[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/ellerbrock/open-source-badge/)
 [![python](https://img.shields.io/badge/python-2-blue.svg)](https://www.python.org/downloads/)
 [![python](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)](https://github.com/ellerbrock/open-source-badge/)
