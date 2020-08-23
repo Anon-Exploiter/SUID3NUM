@@ -1,10 +1,20 @@
 # SUID3NUM
 
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Anon-Exploiter/SUID3NUM.js/graphs/commit-activity)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![python](https://img.shields.io/badge/python-2-blue.svg)](https://www.python.org/downloads/)
-[![python](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
+![GitHub](https://img.shields.io/github/license/Anon-Exploiter/SUID3NUM)
+[![Contributors][contributors-shield]][contributors-url]
+![GitHub closed issues](https://img.shields.io/github/issues-closed/Anon-Exploiter/SUID3NUM)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/Anon-Exploiter/SUID3NUM)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=%40syed_umar)](https://twitter.com/syed__umar)
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
+[contributors-shield]: https://img.shields.io/github/contributors/Anon-Exploiter/SUID3NUM.svg?style=flat-square
+[contributors-url]: https://github.com/Anon-Exploiter/SUID3NUM/graphs/contributors
+[issues-shield]: https://img.shields.io/github/issues/Anon-Exploiter/SUID3NUM.svg?style=flat-square
+[issues-url]: https://github.com/Anon-Exploiter/SUID3NUM/issues
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/syedumararfeen/
 
 
 **A standalone python2/3 script which utilizes python's built-in modules to find SUID bins, separate default bins from custom bins, cross-match those with bins in GTFO Bin's repository & auto-exploit those, all with colors! ( ͡ʘ ͜ʖ ͡ʘ)**
