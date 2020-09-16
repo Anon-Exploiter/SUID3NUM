@@ -33,7 +33,9 @@ Why This?
 - Because LinEnum and other enumeration scripts only print SUID binaries & GTFO Binaries, they don't seperate default from custom, which leads to severe head banging in walls for 3-4 hours when you can't escalate privs :) 
 
 ### Can I use this in OSCP?
-Yes, you totally can. I used it in my exam, linked it in the report as well. Just don't use `-e` (according to some people) and you're good to go!
+**Yes, you totally can.** I used it in my exam, linked it in the report as well. Just don't use `-e` (according to some people) and you're good to go!
+
+The auto exploitation (i.e. -e) was implemented because I'm a little bit lazy and don't really like copy/pasting so it did the rest for me, you won't find easy binaries like those in OSCP (it ain't kids play), you'll definitely have to research a little bit but it'll do half of the work for you -- can't stress this enough. If you're reading this section, good luck for your exam though.  
 
 ### Changelog
 - Added new section of binaries which impact the system (Auto-Exploitation isn't supported for binaries which impact the system in any way i.e. creating new files, directories, modifying existing files etc.). The user has to manually execute those commands, and is supposed to understand those before running as well! (POC: 
