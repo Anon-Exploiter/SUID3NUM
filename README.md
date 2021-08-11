@@ -51,7 +51,12 @@ https://i.imgur.com/FclFFwg.png)
 
 ### Download & Use
 
+***wget***
+
 	wget https://raw.githubusercontent.com/Anon-Exploiter/SUID3NUM/master/suid3num.py --no-check-certificate && chmod 777 suid3num.py
+
+***curl***
+
 	curl -k https://raw.githubusercontent.com/Anon-Exploiter/SUID3NUM/master/suid3num.py --output suid3num.py && chmod 777 suid3num.py
 	
 ### Tested on
