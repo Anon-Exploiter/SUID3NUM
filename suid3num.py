@@ -354,7 +354,7 @@ BANNER  += BLUE + " \\__ \\ |_| | | |) |  |_ \\ .` | |_| | |\\/| |\n"
 BANNER  += RED + " |___/\\___/|_|___/  |___/_|\\_|\\___/|_|  |_| " + CYAN + " twitter@syed__umar\n"
 
 
-def listAllSUIDBinaries():
+def list_all_suid_binaries():
     """
     Find the SUID binaries and return the list
     """
@@ -372,7 +372,7 @@ def listAllSUIDBinaries():
     return(result)
 
 
-def doSomethingPlis(listOfSuidBins):
+def check_suids_in_gtfo(suid_bins):
     """
     This function prints the following data:
         - Default binaries which ship with installation of linux
@@ -380,7 +380,7 @@ def doSomethingPlis(listOfSuidBins):
         - Binaries which match GTFObins list!
 
     Args:
-        listOfSuidBins ([list]): SUID binaries list
+        suid_bins ([list]): SUID binaries list
 
     Returns:
         binsInGTFO, defaultSuidBins, customSuidBins
@@ -390,7 +390,7 @@ def doSomethingPlis(listOfSuidBins):
     customSuidBins  = []
     defaultSuidBins = []
 
-    for bins in listOfSuidBins:
+    for bins in suid_bins:
         _binName = bins.split("/")[::-1][0]
 
         if _binName not in defSUIDBinaries:
@@ -405,26 +405,24 @@ def doSomethingPlis(listOfSuidBins):
     print(WHITE + "["+ RED + "!" + WHITE + "] Default Binaries (Don't bother)")
 
     print(BARLINE)
-    for bins in defaultSuidBins: print(BLUE + bins)
+    for bins in defaultSuidBins:
+        print(BLUE + bins)
     print(WHITE + BARLINE + "\n\n")
 
     print(WHITE + "[" + CYAN + "~" + WHITE + "] " + CYAN + "Custom SUID Binaries (Interesting Stuff)")
 
     print(WHITE + BARLINE)
-    for bins in customSuidBins: print(CYAN + bins)
+    for bins in customSuidBins:
+        print(CYAN + bins)
     print(WHITE + BARLINE + "\n\n")
-
-    """
-    QWgsIEkgc2VlIHlvdSdyZSBhIG1hbiBvZiBjdWx0dXJlIGFzIHdlbGwgOkQgCk5vdCBldmVyeW9uZSByZWFkcyBzb3VyY2UgY29kZSBvZiB3aGF0IHRoZXkncmUgcnVubmluZyBub3ctYS1kYXlzIMKvXF8o44OEKV8vwq8K
-    """
 
     if len(binsInGTFO) != 0:
         print("[" + GREEN + "#" + WHITE + "] " + GREEN + "SUID Binaries in GTFO bins list (Hell Yeah!)")
         print(WHITE + BARLINE)
 
-        for bin in binsInGTFO:
-            pathOfBin   = popen("which " + bin).read().strip()
-            gtfoUrl     = "https://gtfobins.github.io/gtfobins/" + bin[::-1].split("/")[0][::-1] + "/#suid"
+        for binaries in binsInGTFO:
+            pathOfBin   = popen("which " + binaries).read().strip()
+            gtfoUrl     = "https://gtfobins.github.io/gtfobins/" + binaries[::-1].split("/")[0][::-1] + "/#suid"
             print(GREEN + pathOfBin + WHITE + " -~> " + MAGENTA + gtfoUrl)
 
         print(WHITE + BARLINE + "\n\n")
@@ -454,28 +452,15 @@ def doSomethingPlis(listOfSuidBins):
             binaryName             = binaryPath[::-1].split("/")[0][::-1]
             binaryExploitation     = binaryExploitation.replace(binaryName, binaryPath).replace("./", "")
 
-            # print(binaryName, binaryExploitation)
-
             print(WHITE + "[" + CYAN + "&" + WHITE + "] " + MAGENTA + binaryName.capitalize() + WHITE + " ( " + GREEN + binaryPath + " )" + WHITE)
             print(YELLOW + binaryExploitation + WHITE + "\n")
 
         print(WHITE + BARLINE + "\n\n")
-    """
-    @PR End
-    """
+
     return(binsInGTFO, defaultSuidBins, customSuidBins)
 
 
-def note():
-    """Ask the user to report issues if any
-    """    
-    print(WHITE + "[" + RED + "-" + WHITE + "] " + MAGENTA + "Note")
-    print(WHITE + BARLINE)
-    print(BLUE  + "If you see any FP in the output, please report it to make the script better! :)")
-    print(WHITE + BARLINE + "\n")
-
-
-def exploitThisShit(bins):
+def exploit_enumerated_suids(bins):
     """Exploits the enumerated binaries
 
     Params:
@@ -483,7 +468,7 @@ def exploitThisShit(bins):
 
     Args:
         bins ([list]): Vulnerable SUID binaries
-    """    
+    """
     commands     = []
 
     for suidBins in bins:
@@ -517,12 +502,19 @@ def exploitThisShit(bins):
 
 
 def main():
+    """
+    1. List SUIDs
+    2. Check all SUIDs enumerated in GTFO bins list
+    3. Print exploitation commands
+    4. Exploit those enumerated SUIDs (if user specifies: -e)
+    """
+
     print(BANNER)
 
     try:
-        suidBins = listAllSUIDBinaries()
-        gtfoBins = doSomethingPlis(suidBins)
-        exploitThisShit(gtfoBins[0]); note()
+        suidBins = list_all_suid_binaries()
+        gtfoBins = check_suids_in_gtfo(suidBins)
+        exploit_enumerated_suids(gtfoBins[0])
 
     except KeyboardInterrupt:
         print("\n[" + RED + "!" + WHITE + "] " + RED + "Aye, why you do dis!?")
