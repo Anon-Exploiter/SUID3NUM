@@ -28,4 +28,4 @@ jobs:
                   flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
             - name: Run pylint
               run: |
-                  pylint suid3num.py
+                  pylint suid3num.py --exit-zero
