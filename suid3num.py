@@ -383,47 +383,47 @@ def check_suids_in_gtfo(suid_bins):
         suid_bins ([list]): SUID binaries list
 
     Returns:
-        binsInGTFO, defaultSuidBins, customSuidBins
+        bins_in_gtfo, default_suid_bins, custom_suid_bins
     """
 
-    binsInGTFO      = []
-    customSuidBins  = []
-    defaultSuidBins = []
+    bins_in_gtfo      = []
+    custom_suid_bins  = []
+    default_suid_bins = []
 
     for bins in suid_bins:
-        _binName = bins.split("/")[::-1][0]
+        bin_name = bins.split("/")[::-1][0]
 
-        if _binName not in defSUIDBinaries:
-            customSuidBins.append(bins)
+        if bin_name not in defSUIDBinaries:
+            custom_suid_bins.append(bins)
 
-            if _binName in gtfoBinsList:
-                binsInGTFO.append(bins)
+            if bin_name in gtfoBinsList:
+                bins_in_gtfo.append(bins)
 
         else:
-            defaultSuidBins.append(bins)
+            default_suid_bins.append(bins)
 
     print(WHITE + "["+ RED + "!" + WHITE + "] Default Binaries (Don't bother)")
 
     print(BARLINE)
-    for bins in defaultSuidBins:
+    for bins in default_suid_bins:
         print(BLUE + bins)
     print(WHITE + BARLINE + "\n\n")
 
     print(WHITE + "[" + CYAN + "~" + WHITE + "] " + CYAN + "Custom SUID Binaries (Interesting Stuff)")
 
     print(WHITE + BARLINE)
-    for bins in customSuidBins:
+    for bins in custom_suid_bins:
         print(CYAN + bins)
     print(WHITE + BARLINE + "\n\n")
 
-    if len(binsInGTFO) != 0:
+    if len(bins_in_gtfo) != 0:
         print("[" + GREEN + "#" + WHITE + "] " + GREEN + "SUID Binaries in GTFO bins list (Hell Yeah!)")
         print(WHITE + BARLINE)
 
-        for binaries in binsInGTFO:
-            pathOfBin   = popen("which " + binaries).read().strip()
-            gtfoUrl     = "https://gtfobins.github.io/gtfobins/" + binaries[::-1].split("/")[0][::-1] + "/#suid"
-            print(GREEN + pathOfBin + WHITE + " -~> " + MAGENTA + gtfoUrl)
+        for binaries in bins_in_gtfo:
+            path_of_bin   = popen("which " + binaries).read().strip()
+            gtfo_url     = "https://gtfobins.github.io/gtfobins/" + binaries[::-1].split("/")[0][::-1] + "/#suid"
+            print(GREEN + path_of_bin + WHITE + " -~> " + MAGENTA + gtfo_url)
 
         print(WHITE + BARLINE + "\n\n")
 
@@ -435,29 +435,29 @@ def check_suids_in_gtfo(suid_bins):
         print(WHITE + BARLINE + "\n\n")
 
 
-    _binsToExploit = {}
+    bins_to_exploit = {}
 
-    for binary in binsInGTFO:
-        binaryName = binary[::-1].split("/")[0][::-1]
+    for binary in bins_in_gtfo:
+        binary_name = binary[::-1].split("/")[0][::-1]
 
-        if binaryName not in suidExploitation:
-            _binsToExploit[binary] = customSUIDs[binaryName]
+        if binary_name not in suidExploitation:
+            bins_to_exploit[binary] = customSUIDs[binary_name]
 
 
-    if len(_binsToExploit) != 0:
+    if len(bins_to_exploit) != 0:
         print("[" + YELLOW + "&" + WHITE + "] " + CYAN + "Manual Exploitation (Binaries which create files on the system)")
         print(WHITE + BARLINE)
 
-        for binaryPath, binaryExploitation in _binsToExploit.items():
-            binaryName             = binaryPath[::-1].split("/")[0][::-1]
-            binaryExploitation     = binaryExploitation.replace(binaryName, binaryPath).replace("./", "")
+        for binary_path, binary_exploitation in bins_to_exploit.items():
+            binary_name             = binary_path[::-1].split("/")[0][::-1]
+            binary_exploitation     = binary_exploitation.replace(binary_name, binary_path).replace("./", "")
 
-            print(WHITE + "[" + CYAN + "&" + WHITE + "] " + MAGENTA + binaryName.capitalize() + WHITE + " ( " + GREEN + binaryPath + " )" + WHITE)
-            print(YELLOW + binaryExploitation + WHITE + "\n")
+            print(WHITE + "[" + CYAN + "&" + WHITE + "] " + MAGENTA + binary_name.capitalize() + WHITE + " ( " + GREEN + binary_path + " )" + WHITE)
+            print(YELLOW + binary_exploitation + WHITE + "\n")
 
         print(WHITE + BARLINE + "\n\n")
 
-    return(binsInGTFO, defaultSuidBins, customSuidBins)
+    return(bins_in_gtfo, default_suid_bins, custom_suid_bins)
 
 
 def exploit_enumerated_suids(bins):
@@ -471,11 +471,11 @@ def exploit_enumerated_suids(bins):
     """
     commands     = []
 
-    for suidBins in bins:
-        _bin     = suidBins.split("/")[::-1][0]
+    for suid_bins in bins:
+        _bin     = suid_bins.split("/")[::-1][0]
 
         if _bin in suidExploitation:
-            _results = suidBins + " " + suidExploitation[_bin]
+            _results = suid_bins + " " + suidExploitation[_bin]
             commands.append(_results)
 
     if len(commands) != 0:
@@ -512,9 +512,9 @@ def main():
     print(BANNER)
 
     try:
-        suidBins = list_all_suid_binaries()
-        gtfoBins = check_suids_in_gtfo(suidBins)
-        exploit_enumerated_suids(gtfoBins[0])
+        suid_bins = list_all_suid_binaries()
+        gtfo_bins = check_suids_in_gtfo(suid_bins)
+        exploit_enumerated_suids(gtfo_bins[0])
 
     except KeyboardInterrupt:
         print("\n[" + RED + "!" + WHITE + "] " + RED + "Aye, why you do dis!?")
