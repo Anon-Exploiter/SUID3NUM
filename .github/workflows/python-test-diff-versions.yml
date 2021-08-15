@@ -37,5 +37,4 @@ jobs:
 
             - name: Run the python script with modified find command
               run: |
-                  sed -i -e "s:find /:cp $(which sh) ./sh; chmod u+s ./sh; find .:g" suid3num.py
                   python suid3num.py
