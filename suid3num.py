@@ -545,6 +545,7 @@ gtfoBinsSuidsList = [
    "zsh",
 ]
 
+# The following list contains GTFO Bins binaries which are LimitedSUID exploitable
 gtfoBinsLimitedSuidsList = [
     "aria2c",
     "batcat",
@@ -613,7 +614,7 @@ BARLINE = "------------------------------"
 BANNER  = MAGENTA + "  ___ _   _ _ ___    _____  _ _   _ __  __ \n"
 BANNER  += YELLOW + " / __| | | / |   \\  |__ / \\| | | | |  \\/  |\n"
 BANNER  += BLUE + " \\__ \\ |_| | | |) |  |_ \\ .` | |_| | |\\/| |\n"
-BANNER  += RED + " |___/\\___/|_|___/  |___/_|\\_|\\___/|_|  |_| " + CYAN + " twitter@syed__umar\n"
+BANNER  += RED + " |___/\\___/|_|___/  |___/_|\\_|\\___/|_|  |_| " + CYAN + " twitter@syed__umar\n" + RESET
 
 
 def list_all_suid_binaries():
@@ -621,16 +622,16 @@ def list_all_suid_binaries():
     Find the SUID binaries and return the list
     """
 
-    print(WHITE + "[" + BLUE + "#" + WHITE + "] " + YELLOW + "Finding/Listing all SUID Binaries ..")
-    print(WHITE + BARLINE)
+    print(WHITE + "[" + BLUE + "#" + WHITE + "] " + YELLOW + "Finding/Listing all SUID Binaries .." + RESET)
+    print(WHITE + BARLINE + RESET)
 
-    command     = "find / -perm -4000 -type f 2>/dev/null"
-    result      = popen(command).read().strip().split("\n")
+    command = "find / -perm -4000 -type f 2>/dev/null"
+    result = popen(command).read().strip().split("\n")
 
     for bins in result:
-        print(YELLOW + bins)
+        print(YELLOW + bins + RESET)
 
-    print(WHITE + BARLINE + "\n\n")
+    print(WHITE + BARLINE + "\n\n" + RESET)
     return(result)
 
 
@@ -648,7 +649,7 @@ def check_suids_in_gtfo(suid_bins):
         bins_in_gtfo, default_suid_bins, custom_suid_bins
     """
 
-    bins_in_gtfo      = []
+    bins_in_gtfo = []
     custom_suid_bins  = []
     default_suid_bins = []
 
@@ -664,40 +665,42 @@ def check_suids_in_gtfo(suid_bins):
         else:
             default_suid_bins.append(bins)
 
-    print(WHITE + "["+ RED + "!" + WHITE + "] Default Binaries (Don't bother)")
+    print(WHITE + "["+ RED + "!" + WHITE + "] Default Binaries (Don't bother)" + RESET)
 
     print(BARLINE)
     for bins in default_suid_bins:
-        print(BLUE + bins)
-    print(WHITE + BARLINE + "\n\n")
+        print(BLUE + bins + RESET)
+    print(WHITE + BARLINE + "\n\n" + RESET)
 
-    print(WHITE + "[" + CYAN + "~" + WHITE + "] " + CYAN + "Custom SUID Binaries (Interesting Stuff)")
+    print(WHITE + "[" + CYAN + "~" + WHITE + "] " + CYAN + "Custom SUID Binaries (Interesting Stuff)" + RESET)
 
-    print(WHITE + BARLINE)
+    print(WHITE + BARLINE + RESET)
     for bins in custom_suid_bins:
-        print(CYAN + bins)
-    print(WHITE + BARLINE + "\n\n")
+        print(CYAN + bins + RESET)
+    print(WHITE + BARLINE + "\n\n" + RESET)
 
     if len(bins_in_gtfo) != 0:
-        print("[" + GREEN + "#" + WHITE + "] " + GREEN + "SUID Binaries in GTFO bins list (Hell Yeah!)")
-        print(WHITE + BARLINE)
+        print("[" + GREEN + "#" + WHITE + "] " + GREEN + "SUID Binaries in GTFO bins list (Hell Yeah!)" + RESET)
+        print(WHITE + BARLINE + RESET)
 
         for binaries in bins_in_gtfo:
             path_of_bin   = popen("which " + binaries).read().strip()
+            # Return the link of suid binaries
             if binaries in gtfoBinsSuidsList :
                 gtfo_url = "https://gtfobins.github.io/gtfobins/" + binaries[::-1].split("/")[0][::-1] + "/#suid"
+            # Return the link of limited suid binaries (those links end with /#limited-suid)
             else :
                 gtfo_url = "https://gtfobins.github.io/gtfobins/" + binaries[::-1].split("/")[0][::-1] + "/#limited-suid"
-            print(GREEN + path_of_bin + WHITE + " -~> " + MAGENTA + gtfo_url)
+            print(GREEN + path_of_bin + WHITE + " -~> " + MAGENTA + gtfo_url + RESET)
 
-        print(WHITE + BARLINE + "\n\n")
+        print(WHITE + BARLINE + "\n\n" + RESET)
 
     else:
-        print("[" + GREEN + "#" + WHITE + "] " + GREEN + "SUID Binaries found in GTFO bins..")
-        print(WHITE + BARLINE)
+        print("[" + GREEN + "#" + WHITE + "] " + GREEN + "SUID Binaries found in GTFO bins.." + RESET)
+        print(WHITE + BARLINE + RESET)
 
-        print("[" + RED + "!" + WHITE + "] " + MAGENTA + "None " + RED + ":(")
-        print(WHITE + BARLINE + "\n\n")
+        print("[" + RED + "!" + WHITE + "] " + MAGENTA + "None " + RED + ":(" + RESET)
+        print(WHITE + BARLINE + "\n\n" + RESET)
 
 
     bins_to_exploit = {}
@@ -710,17 +713,17 @@ def check_suids_in_gtfo(suid_bins):
 
 
     if len(bins_to_exploit) != 0:
-        print("[" + YELLOW + "&" + WHITE + "] " + CYAN + "Manual Exploitation (Binaries which create files on the system)")
-        print(WHITE + BARLINE)
+        print("[" + YELLOW + "&" + WHITE + "] " + CYAN + "Manual Exploitation (Binaries which create files on the system)" + RESET)
+        print(WHITE + BARLINE + RESET)
 
         for binary_path, binary_exploitation in bins_to_exploit.items():
-            binary_name             = binary_path[::-1].split("/")[0][::-1]
-            binary_exploitation     = binary_exploitation.replace(binary_name, binary_path).replace("./", "")
+            binary_name = binary_path[::-1].split("/")[0][::-1]
+            binary_exploitation = binary_exploitation.replace(binary_name, binary_path).replace("./", "")
 
-            print(WHITE + "[" + CYAN + "&" + WHITE + "] " + MAGENTA + binary_name.capitalize() + WHITE + " ( " + GREEN + binary_path + " )" + WHITE)
-            print(YELLOW + binary_exploitation + WHITE + "\n")
+            print(WHITE + "[" + CYAN + "&" + WHITE + "] " + MAGENTA + binary_name.capitalize() + WHITE + " ( " + GREEN + binary_path + " )" + WHITE + RESET)
+            print(YELLOW + binary_exploitation + WHITE + "\n" + RESET)
 
-        print(WHITE + BARLINE + "\n\n")
+        print(WHITE + BARLINE + "\n\n" + RESET)
 
     return(bins_in_gtfo, default_suid_bins, custom_suid_bins)
 
@@ -737,7 +740,7 @@ def exploit_enumerated_suids(bins):
     commands     = []
 
     for suid_bins in bins:
-        _bin     = suid_bins.split("/")[::-1][0]
+        _bin = suid_bins.split("/")[::-1][0]
 
         if _bin in suidExploitation:
             _results = suid_bins + " " + suidExploitation[_bin]
@@ -746,24 +749,24 @@ def exploit_enumerated_suids(bins):
     if len(commands) != 0:
         if len(argv) == 2:
             if argv[1] == '-e':
-                print(WHITE + "[" + MAGENTA + "$" + WHITE + "] " + WHITE + "Auto Exploiting SUID bit binaries !!!")
-                print(WHITE + BARLINE)
+                print(WHITE + "[" + MAGENTA + "$" + WHITE + "] " + WHITE + "Auto Exploiting SUID bit binaries !!!" + RESET)
+                print(WHITE + BARLINE + RESET)
 
                 for _commands in commands:
-                    print(MAGENTA + "\n[#] Executing Command .. ")
-                    print(CYAN + "[~] " + _commands + "\n" + WHITE)
+                    print(MAGENTA + "\n[#] Executing Command .. " + RESET)
+                    print(CYAN + "[~] " + _commands + "\n" + WHITE + RESET)
                     sleep(0.5)
                     system(_commands)
                     sleep(0.5)
 
         else:
-            print(WHITE + "[" + GREEN + "$" + WHITE + "] " + WHITE + "Please try the command(s) below to exploit harmless SUID bin(s) found !!!")
-            print(WHITE + BARLINE)
+            print(WHITE + "[" + GREEN + "$" + WHITE + "] " + WHITE + "Please try the command(s) below to exploit harmless SUID bin(s) found !!!" + RESET)
+            print(WHITE + BARLINE + RESET)
 
             for _commands in commands:
                 print("[~] " + _commands)
 
-        print(WHITE + BARLINE + "\n\n")
+        print(WHITE + BARLINE + "\n\n" + RESET)
 
 
 def main():
