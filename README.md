@@ -19,7 +19,7 @@
 
 **A standalone python2/3 script which utilizes python's built-in modules to find SUID bins, separate default bins from custom bins, cross-match those with bins in GTFO Bin's repository & auto-exploit those, all with colors! ( ͡ʘ ͜ʖ ͡ʘ)**
 
-[![asciicast](https://asciinema.org/a/343568.png)](https://asciinema.org/a/343568)
+[![asciicast](assets/asciicast-demo.png)](https://asciinema.org/a/343568)
 
 ### Description
 A standalone script supporting both python2 & python3 to find out all SUID binaries in machines/CTFs and do the following
@@ -86,7 +86,7 @@ https://i.imgur.com/FclFFwg.png)
 
 ### Auto Exploitation of SUID Bins
 
-[![asciicast](https://asciinema.org/a/343572.png)](https://asciinema.org/a/343572)
+[![asciicast](assets/asciicast-exploit.png)](https://asciinema.org/a/343572)
 
 ### Note 
 <pre><code>Please run the script after going through what it does & with prior knowledge of SUID bins.
