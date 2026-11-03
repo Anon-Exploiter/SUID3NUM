@@ -23,6 +23,7 @@ import json
 import re
 import sys
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 
 REPO = "GTFOBins/GTFOBins.github.io"
 TREE_URL = "https://api.github.com/repos/%s/git/trees/master?recursive=1" % REPO
@@ -44,11 +45,15 @@ def fetch_suid_bins():
     paths = [n["path"] for n in tree if n["path"].startswith("_gtfobins/")]
 
     parsed = {}
-    for path in paths:
+    # ponytail: ThreadPoolExecutor over asyncio/aiohttp; this is one blocking
+    # GET per file, raise max_workers if upstream ever throttles us.
+    with ThreadPoolExecutor(max_workers=16) as pool:
+        bodies = pool.map(lambda p: _get(RAW + p), paths)
+    for path, body in zip(paths, bodies):
         name = path.split("/", 1)[1]
         if "." in name:  # skip old-version files like foo.md
             continue
-        parsed[name] = yaml.safe_load(_get(RAW + path)) or {}
+        parsed[name] = yaml.safe_load(body) or {}
 
     suid = {}
     for name, data in parsed.items():

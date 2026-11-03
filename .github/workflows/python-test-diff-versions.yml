@@ -6,15 +6,28 @@ jobs:
     build:
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix:
-                python-version: [2.7, 3.7, 3.9]
+                include:
+                    # ponytail: hosted setup-python dropped 2.7/3.7 from its
+                    # tool cache; official python Docker images still ship
+                    # them, so run those two in-container instead of via
+                    # setup-python. Bump these tags when upstream retags.
+                    - label: '2.7 (old py2)'
+                      container: 'python:2.7'
+                    - label: '3.7 (old py3)'
+                      container: 'python:3.7'
+                    - label: '3.13 (new py3)'
+                      python-version: '3.13'
+        container: ${{ matrix.container }}
 
         steps:
             - name: Checkout the code
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
 
             - name: Set up Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v2
+              if: matrix.python-version
+              uses: actions/setup-python@v5
               with:
                   python-version: ${{ matrix.python-version }}
 
