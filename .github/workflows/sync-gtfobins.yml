@@ -1,0 +1,43 @@
+name: Sync GTFObins SUID list
+
+on:
+    schedule:
+        - cron: '0 6 * * 1'  # every Monday 06:00 UTC
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    sync:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: '3.x'
+
+            - run: pip install pyyaml
+
+            - name: Update GTFObins data in suid3num.py
+              run: python .github/scripts/update_gtfobins.py
+
+            - name: Sanity check (parses + runs on both pythons is covered by the test workflow)
+              run: python -c "import ast; ast.parse(open('suid3num.py').read())"
+
+            - name: Create pull request
+              uses: peter-evans/create-pull-request@v6
+              with:
+                  commit-message: 'chore: sync GTFObins SUID binaries'
+                  branch: automated/gtfobins-sync
+                  delete-branch: true
+                  title: 'Sync GTFObins SUID binaries'
+                  body: |
+                      Automated weekly sync of GTFObins SUID data in `suid3num.py`.
+
+                      - `gtfoBinsSuidsList` regenerated from live GTFObins.
+                      - New SUID binaries appended to `customSUIDs` (append-only; existing entries untouched).
+
+                      New `customSUIDs` entries use the raw upstream SUID command; polish wording if needed before merge.
