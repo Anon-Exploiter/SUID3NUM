@@ -19,7 +19,7 @@
 
 **A standalone python2/3 script which utilizes python's built-in modules to find SUID bins, separate default bins from custom bins, cross-match those with bins in GTFO Bin's repository & auto-exploit those, all with colors! ( ͡ʘ ͜ʖ ͡ʘ)**
 
-[![asciicast](https://asciinema.org/a/343568.svg)](https://asciinema.org/a/343568)
+[![asciicast](https://asciinema.org/a/343568.png)](https://asciinema.org/a/343568)
 
 ### Description
 A standalone script supporting both python2 & python3 to find out all SUID binaries in machines/CTFs and do the following
@@ -86,7 +86,7 @@ https://i.imgur.com/FclFFwg.png)
 
 ### Auto Exploitation of SUID Bins
 
-[![asciicast](https://asciinema.org/a/343572.svg)](https://asciinema.org/a/343572)
+[![asciicast](https://asciinema.org/a/343572.png)](https://asciinema.org/a/343572)
 
 ### Note 
 <pre><code>Please run the script after going through what it does & with prior knowledge of SUID bins.
@@ -94,7 +94,7 @@ P.S ~ Don't run with `-e` parameter, if you don't know what you're doing!
 </code></pre>
 
 ### Stargazers Chart
-[![Stargazers over time](https://starchart.cc/Anon-Exploiter/SUID3NUM.svg)](https://starchart.cc/Anon-Exploiter/SUID3NUM)
+[![Star History Chart](https://api.star-history.com/svg?repos=Anon-Exploiter/SUID3NUM&type=Date)](https://star-history.com/#Anon-Exploiter/SUID3NUM&Date)
 
 ### Shoutouts
 Shoutout to [Zeeshan Sahi](https://www.linkedin.com/in/zeeshan-sahi-366238117/) & [Bilal Rizwan](https://github.com/th3-3inst3in) for their ideas and contribution. Also, thanks to [Cyrus](https://github.com/cyrus-and) for [GTFO Bins](https://gtfobins.github.io/) <3
